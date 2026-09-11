@@ -1,0 +1,191 @@
+/*
+ * ZEAK Design System — Reusable Stylesheet
+ * Import this in any app's main CSS file to get all ZEAK component classes.
+ * Requires: Tailwind CSS + the zeak tailwind.config.js tokens.
+ * Usage:  @import './zeak-design-system.css';  (after @tailwind directives)
+ */
+
+/* ── CSS Custom Properties ─────────────────────────────── */
+:root {
+  --zeak-ink: #101722;
+  --zeak-muted: #627084;
+  --zeak-line: #dfe4eb;
+  --zeak-blue: #4d85ff;
+  --zeak-cyan: #52dddc;
+  --zeak-violet: #8e6cff;
+  --zeak-sand: #f3f5f3;
+  --zeak-charcoal: #111a25;
+  --zeak-white: #f8f9fb;
+  --zeak-sand-section: #f0f3f1;
+  --zeak-charcoal-section: #17212d;
+  --zeak-hero-dark: #101925;
+  --zeak-dark-text: #f6f8fb;
+  --zeak-dark-body: #aab7c9;
+  --zeak-dark-muted: #71849f;
+  --zeak-dark-link: #8ab3eb;
+  --zeak-accent-blue: #4c8dff;
+  --zeak-accent-cyan: #42cfd1;
+  --zeak-accent-violet: #9678ff;
+  --zeak-accent-green: #62c992;
+  --zeak-accent-amber: #d9a54a;
+  --zeak-accent-slate: #8394a8;
+  --zeak-success: #54a18c;
+  --zeak-warning: #bf9d5a;
+  --zeak-error: #c28c48;
+  --zeak-border-dark: rgba(180, 201, 222, 0.18);
+  --zeak-border-featured: #a7c7f4;
+}
+
+/* ── Base ──────────────────────────────────────────────── */
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  background: var(--zeak-white);
+  color: var(--zeak-ink);
+}
+html { scroll-behavior: smooth; }
+
+/* ── Eyebrow / Section Label ───────────────────────────── */
+.zeak-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #70809a;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.17em;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.zeak-eyebrow::before {
+  content: '';
+  height: 6px;
+  width: 6px;
+  background: #58cbd7;
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(88, 203, 215, 0.14);
+}
+.zeak-eyebrow-dark { color: #a8b8cd; }
+
+/* ── Buttons ───────────────────────────────────────────── */
+.zeak-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  padding: 13px 18px;
+  border-radius: 7px;
+  background: var(--zeak-ink);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.zeak-btn:hover {
+  background: #2c3a4b;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(16, 23, 34, 0.17);
+}
+.zeak-btn-light {
+  background: #fff;
+  color: var(--zeak-ink);
+}
+.zeak-btn-light:hover { background: #edf5ff; }
+
+/* ── Text Link ─────────────────────────────────────────── */
+.zeak-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #26354a;
+  transition: gap 0.2s;
+}
+.zeak-link:hover { gap: 14px; }
+.zeak-link-light { color: #dce5f2; }
+
+/* ── Cards ─────────────────────────────────────────────── */
+.zeak-card {
+  background: #fff;
+  border: 1px solid var(--zeak-line);
+  border-radius: 12px;
+  padding: 22px;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.zeak-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px rgba(41, 66, 90, 0.1);
+  border-color: #bad0ea;
+}
+.zeak-card-dark {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--zeak-border-dark);
+  color: #aab8c9;
+}
+.zeak-card-dark:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(117, 179, 239, 0.5);
+  transform: translateY(-5px);
+}
+
+/* ── Section Surfaces ──────────────────────────────────── */
+.zeak-section-white { background: var(--zeak-white); }
+.zeak-section-sand { background: var(--zeak-sand-section); }
+.zeak-section-charcoal { background: var(--zeak-charcoal-section); color: #f8fafc; }
+.zeak-section-dark { background: var(--zeak-hero-dark); color: #f6f8fb; }
+
+/* ── Grid Background ───────────────────────────────────── */
+.zeak-grid-bg {
+  background-image:
+    linear-gradient(rgba(127, 168, 214, 0.12) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 168, 214, 0.12) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+/* ── Status Dot ────────────────────────────────────────── */
+.zeak-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.zeak-status-live {
+  background: #52d5c2;
+  box-shadow: 0 0 9px #52d5c2;
+}
+
+/* ── Accent Helpers ────────────────────────────────────── */
+.zeak-accent-blue { --accent: var(--zeak-accent-blue); }
+.zeak-accent-cyan { --accent: var(--zeak-accent-cyan); }
+.zeak-accent-violet { --accent: var(--zeak-accent-violet); }
+.zeak-accent-green { --accent: var(--zeak-accent-green); }
+.zeak-accent-amber { --accent: var(--zeak-accent-amber); }
+.zeak-accent-slate { --accent: var(--zeak-accent-slate); }
+
+.zeak-icon-accent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 14%, white);
+  color: var(--accent);
+}
+
+/* ── Animations ────────────────────────────────────────── */
+.zeak-animate-flow { animation: flow 2s infinite; }
+.zeak-animate-blink { animation: blink 1s infinite; }
+
+@keyframes flow {
+  0% { left: 0; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}
