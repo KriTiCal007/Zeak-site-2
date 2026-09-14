@@ -1,28 +1,30 @@
-import { ArrowRight, ArrowUpRight, Check } from 'lucide-react';
+import { ArrowRight, Check } from 'lucide-react';
 import { Link, Navigate, useLocation } from 'react-router-dom';
 import { pageByPath, relatedPages, type PageContent } from '../data/navigation';
-import { Button, SectionLabel } from '../components/ui';
+import { Button, SectionMark, Tag } from '../components/ui';
 
 function ContentView({ page }: { page: PageContent }) {
   const related = relatedPages(page.path);
 
   return (
     <main className="content-page">
-      <section className="page-hero dark-section">
-        <div className="hero-grid" />
+      <section className="page-hero">
+        <div className="hero-glow" />
         <div className="container page-hero-inner">
-          <SectionLabel dark>{page.category.toUpperCase()}</SectionLabel>
+          <Tag tone="lime">{page.category}</Tag>
           <h1>
             {page.title}
             <br />
-            <span>{page.headline}</span>
+            <span className="hero-highlight soft">{page.headline}</span>
           </h1>
           <p className="hero-copy">{page.description}</p>
           <div className="hero-actions">
-            <Button to="/company/contact">Book a Demo</Button>
-            <Link className="text-link light-link" to="/platform">
-              Explore the Platform <ArrowRight size={16} />
-            </Link>
+            <Button to="/company/contact" variant="lime">
+              Book a demo
+            </Button>
+            <Button to="/platform" variant="teal">
+              Explore platform
+            </Button>
           </div>
           <div className="page-highlights">
             {page.highlights.map((item) => (
@@ -35,26 +37,16 @@ function ContentView({ page }: { page: PageContent }) {
         </div>
       </section>
 
-      <section className="section section-white">
+      <section className="section section-cream">
         <div className="container">
-          <div className="section-heading split-heading">
-            <div>
-              <SectionLabel>CAPABILITIES</SectionLabel>
-              <h2>
-                Built for how
-                <br />
-                <em>your teams actually work.</em>
-              </h2>
-            </div>
-            <p>
-              Every Zeak experience shares the same design language—clear hierarchy, operational
-              clarity, and a path from insight to governed action.
-            </p>
+          <div className="section-head">
+            <SectionMark>CAPABILITIES</SectionMark>
+            <h2>Built for how your teams actually work</h2>
           </div>
-          <div className="capability-cards">
+          <div className="capability-board">
             {page.capabilities.map((capability, index) => (
-              <article className="capability-card" key={capability.title}>
-                <span className="capability-index">{String(index + 1).padStart(2, '0')}</span>
+              <article key={capability.title}>
+                <span className="mono-meta">{String(index + 1).padStart(2, '0')}</span>
                 <h3>{capability.title}</h3>
                 <p>{capability.detail}</p>
               </article>
@@ -64,24 +56,20 @@ function ContentView({ page }: { page: PageContent }) {
       </section>
 
       {related.length > 0 && (
-        <section className="section section-sand">
+        <section className="section section-cream related-band">
           <div className="container">
-            <div className="section-heading centered-heading">
-              <SectionLabel>RELATED IN {page.category.toUpperCase()}</SectionLabel>
-              <h2>
-                Keep exploring
-                <br />
-                <em>the same operating layer.</em>
-              </h2>
+            <div className="section-head centered">
+              <SectionMark>RELATED</SectionMark>
+              <h2>Keep exploring {page.category.toLowerCase()}</h2>
             </div>
-            <div className="related-grid">
+            <div className="related-board">
               {related.map((item) => (
-                <Link to={item.path} className="related-card" key={item.path}>
-                  <small>{item.category}</small>
+                <Link to={item.path} key={item.path} className="related-tile">
+                  <Tag>{item.category}</Tag>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
-                  <span>
-                    View page <ArrowUpRight size={15} />
+                  <span className="tile-link">
+                    View page <ArrowRight size={14} />
                   </span>
                 </Link>
               ))}
@@ -90,24 +78,22 @@ function ContentView({ page }: { page: PageContent }) {
         </section>
       )}
 
-      <section className="final-cta dark-section page-cta">
-        <div className="cta-lines" />
+      <section className="final-cta page-cta">
+        <div className="final-cta-glow" />
         <div className="container final-cta-inner">
-          <SectionLabel dark>READY TO GO FURTHER</SectionLabel>
+          <SectionMark>NEXT STEP</SectionMark>
           <h2>
             See {page.title.toLowerCase()}
             <br />
-            <span>in your operating context.</span>
+            in your operating context
           </h2>
-          <p>
-            Connect your systems. Build intelligent applications. Deploy AI agents. Automate
-            operations—with security and governance built in.
-          </p>
           <div className="hero-actions">
-            <Button to="/company/contact">Book a Demo</Button>
-            <a className="text-link light-link" href="mailto:hello@zeak.ai">
-              Talk to Zeak <ArrowRight size={16} />
-            </a>
+            <Button to="/company/contact" variant="lime">
+              Book a demo
+            </Button>
+            <Button href="mailto:hello@zeak.ai" variant="teal">
+              Talk to Zeak
+            </Button>
           </div>
         </div>
       </section>
@@ -118,10 +104,6 @@ function ContentView({ page }: { page: PageContent }) {
 export default function ContentPage() {
   const { pathname } = useLocation();
   const page = pageByPath[pathname];
-
-  if (!page) {
-    return <Navigate to="/" replace />;
-  }
-
+  if (!page) return <Navigate to="/" replace />;
   return <ContentView page={page} />;
 }

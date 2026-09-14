@@ -1,62 +1,62 @@
 import type { ReactNode } from 'react';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-export function Logo({ compact = false }: { compact?: boolean }) {
+export function Logo({ compact = false, light = false }: { compact?: boolean; light?: boolean }) {
   return (
-    <div className={`logo ${compact ? 'logo-compact' : ''}`}>
-      <span className="logo-mark">
-        <i />
-        <i />
-        <i />
-      </span>
-      {!compact && <span>ZEAK</span>}
-    </div>
+    <span className={`logo ${compact ? 'logo-compact' : ''} ${light ? 'logo-light' : ''}`}>
+      <img
+        src={light ? '/zeak-logo-on-dark.png' : '/zeak-logo.png'}
+        alt="ZEAK"
+        className="logo-img"
+        width={840}
+        height={280}
+      />
+    </span>
   );
 }
 
-export function Button({
-  children,
-  light = false,
-  className = '',
-  to,
-  href,
-}: {
+type ButtonProps = {
   children: ReactNode;
-  light?: boolean;
+  variant?: 'lime' | 'teal' | 'ghost' | 'dark';
   className?: string;
   to?: string;
   href?: string;
-}) {
-  const classes = `button ${light ? 'button-light' : ''} ${className}`;
-  if (to) {
-    return (
-      <Link to={to} className={classes}>
-        {children}
-        <ArrowUpRight size={16} />
-      </Link>
-    );
-  }
-  if (href) {
-    return (
-      <a href={href} className={classes}>
-        {children}
-        <ArrowUpRight size={16} />
-      </a>
-    );
-  }
+  type?: 'button' | 'submit';
+};
+
+export function Button({
+  children,
+  variant = 'lime',
+  className = '',
+  to,
+  href,
+  type = 'button',
+}: ButtonProps) {
+  const classes = `btn btn-${variant} ${className}`;
+  const content = (
+    <>
+      <span>{children}</span>
+      <ArrowRight size={15} strokeWidth={2.25} />
+    </>
+  );
+  if (to) return <Link to={to} className={classes}>{content}</Link>;
+  if (href) return <a href={href} className={classes}>{content}</a>;
   return (
-    <button type="button" className={classes}>
-      {children}
-      <ArrowUpRight size={16} />
+    <button type={type} className={classes}>
+      {content}
     </button>
   );
 }
 
-export function SectionLabel({ children, dark = false }: { children: ReactNode; dark?: boolean }) {
+export function Tag({ children, tone = 'muted' }: { children: ReactNode; tone?: 'muted' | 'lime' | 'cream' }) {
+  return <span className={`tag tag-${tone}`}>[{children}]</span>;
+}
+
+export function SectionMark({ children }: { children: ReactNode }) {
   return (
-    <div className={`eyebrow ${dark ? 'eyebrow-dark' : ''}`}>
-      <span className="eyebrow-dot" />
+    <div className="section-mark">
+      <i />
       {children}
     </div>
   );
@@ -64,12 +64,4 @@ export function SectionLabel({ children, dark = false }: { children: ReactNode; 
 
 export function LinkedInIcon() {
   return <span className="linkedin-icon">in</span>;
-}
-
-export function FlaskIcon() {
-  return (
-    <span className="flask-icon">
-      <span />
-    </span>
-  );
 }

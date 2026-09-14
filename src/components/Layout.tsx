@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { ChevronDown, Menu, X, ArrowUpRight, Globe2, Send } from 'lucide-react';
+import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { navGroups } from '../data/navigation';
-import { Button, LinkedInIcon, Logo } from './ui';
+import { Logo } from './ui';
 
 export default function Layout() {
   const [openNav, setOpenNav] = useState<string | null>(null);
@@ -15,108 +15,144 @@ export default function Layout() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const onDoc = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.nav-item, .mobile-toggle, .site-header')) {
+        setOpenNav(null);
+      }
+    };
+    document.addEventListener('click', onDoc);
+    return () => document.removeEventListener('click', onDoc);
+  }, []);
+
   return (
     <div className="site-shell">
-      <header className="site-header">
-        <Link className="brand" to="/">
-          <Logo />
-        </Link>
-        <nav className={`main-nav ${mobileOpen ? 'main-nav-open' : ''}`}>
-          {navGroups.map((item) => (
-            <div className="nav-item" key={item.label}>
-              <button
-                type="button"
-                className="nav-button"
-                onClick={() => setOpenNav(openNav === item.label ? null : item.label)}
-              >
-                {item.label}
-                <ChevronDown size={14} />
-              </button>
-              {openNav === item.label && (
+      <div className="site-header-wrap">
+        <header className={`site-header ${mobileOpen ? 'is-open' : ''}`}>
+          <Link className="brand" to="/" aria-label="Zeak home">
+            <Logo light />
+          </Link>
+
+          <nav className={`main-nav ${mobileOpen ? 'is-open' : ''}`}>
+            {navGroups.map((item) => (
+              <div className={`nav-item ${openNav === item.label ? 'is-open' : ''}`} key={item.label}>
+                <button
+                  type="button"
+                  className="nav-trigger"
+                  onClick={() => setOpenNav(openNav === item.label ? null : item.label)}
+                >
+                  {item.label}
+                  <ChevronDown size={13} strokeWidth={2.25} />
+                </button>
                 <div className="nav-dropdown">
                   {item.items.map((entry) => (
                     <NavLink
                       to={entry.path}
                       key={entry.path}
-                      className={({ isActive }) => (isActive ? 'nav-link-active' : undefined)}
-                      onClick={() => setOpenNav(null)}
+                      className={({ isActive }) => (isActive ? 'is-active' : undefined)}
+                      onClick={() => {
+                        setOpenNav(null);
+                        setMobileOpen(false);
+                      }}
                     >
                       {entry.label}
-                      <ArrowUpRight size={13} />
                     </NavLink>
                   ))}
                 </div>
-              )}
-            </div>
-          ))}
-          <div className="mobile-nav-actions">
-            <a href="https://devb.zeak.io/auth/login">Sign In</a>
-            <Button to="/company/contact">Book a Demo</Button>
+              </div>
+            ))}
+          </nav>
+
+          <div className="header-actions">
+            <a className="signin-link" href="https://devb.zeak.io/auth/login">
+              Sign in
+            </a>
+            <span className="header-divider" aria-hidden />
+            <Link className="signup-link" to="/company/contact">
+              Sign up
+              <ArrowRight size={14} strokeWidth={2.4} />
+            </Link>
           </div>
-        </nav>
-        <div className="header-actions">
-          <a href="https://devb.zeak.io/auth/login">Sign In</a>
-          <Button to="/company/contact">Book a Demo</Button>
-        </div>
-        <button
-          type="button"
-          className="mobile-menu"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X /> : <Menu />}
-        </button>
-      </header>
+
+          <button
+            type="button"
+            className="mobile-toggle"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={18} /> : <Menu size={18} />}
+          </button>
+        </header>
+
+        {mobileOpen && (
+          <div className="mobile-panel">
+            {navGroups.map((item) => (
+              <div className={`nav-item ${openNav === item.label ? 'is-open' : ''}`} key={item.label}>
+                <button
+                  type="button"
+                  className="nav-trigger"
+                  onClick={() => setOpenNav(openNav === item.label ? null : item.label)}
+                >
+                  {item.label}
+                  <ChevronDown size={14} />
+                </button>
+                {openNav === item.label && (
+                  <div className="nav-dropdown">
+                    {item.items.map((entry) => (
+                      <NavLink
+                        to={entry.path}
+                        key={entry.path}
+                        onClick={() => {
+                          setOpenNav(null);
+                          setMobileOpen(false);
+                        }}
+                      >
+                        {entry.label}
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="mobile-actions">
+              <a className="signin-link" href="https://devb.zeak.io/auth/login">
+                Sign in
+              </a>
+              <Link className="signup-link" to="/company/contact" onClick={() => setMobileOpen(false)}>
+                Sign up
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
 
       <Outlet />
 
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-top">
-            <div className="footer-brand">
-              <Logo />
-              <p>
-                The enterprise intelligence
-                <br />
-                &amp; execution platform.
-              </p>
-              <div className="footer-socials">
-                <Link to="/company/contact">
-                  <Globe2 size={16} />
-                </Link>
-                <Link to="/company/contact">
-                  <LinkedInIcon />
-                </Link>
-                <Link to="/company/contact">
-                  <Send size={16} />
-                </Link>
-              </div>
-            </div>
-            <div className="footer-links">
-              {navGroups.map((group) => (
-                <div key={group.label}>
-                  <strong>{group.label}</strong>
-                  {group.items.slice(0, 3).map((item) => (
-                    <Link to={item.path} key={item.path}>
-                      {item.label}
-                    </Link>
-                  ))}
-                </div>
-              ))}
-              <div>
-                <strong>Trust</strong>
-                <Link to="/platform/security-governance">Security</Link>
-                <Link to="/company/contact">Privacy</Link>
-                <Link to="/company/contact">Terms</Link>
-              </div>
-            </div>
+      <footer className="site-footer">
+        <div className="container footer-grid">
+          <div className="footer-brand">
+            <Logo light />
+            <p>Enterprise intelligence &amp; execution for teams that run on real systems.</p>
           </div>
-          <div className="footer-bottom">
-            <span>© 2026 Zeak Technologies. All rights reserved.</span>
-            <span>
-              CONNECT <i /> UNDERSTAND <i /> DECIDE <i /> ACT
-            </span>
+          <div className="footer-cols">
+            {navGroups.map((group) => (
+              <div key={group.label}>
+                <strong>{group.label}</strong>
+                {group.items.slice(0, 4).map((item) => (
+                  <Link to={item.path} key={item.path}>
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ))}
           </div>
+        </div>
+        <div className="container footer-bottom">
+          <span>© 2026 Zeak Technologies. All rights reserved.</span>
+          <span className="footer-loop">
+            CONNECT <i /> UNDERSTAND <i /> DECIDE <i /> ACT
+          </span>
         </div>
       </footer>
     </div>
